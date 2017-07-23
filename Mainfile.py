@@ -249,12 +249,11 @@ def delete_negative_comment(insta_username):
     else:
       print 'Status code other than 200 received!'
 
- ############################################# ANALYSE_INTEREST ###########################################
+
+    ############################################# ANALYSE_INTEREST ###########################################
     '''
     FUNCTION DECLERTAION TO ANALYSE THE INTEREST OF  THE USER BY THEIR HASHTAG
     '''
-
-
 def analyse_interest(insta_username):
         user_id = get_user_id(insta_username)
         media_id = get_post_id(insta_username)
@@ -282,19 +281,38 @@ def analyse_interest(insta_username):
         else:
             for tag in re.findall("#[a-zA-Z0-9]+", str(user_media['data'][0]['caption'])):
                 hashtags.append(tag)
-            ##return hashtags
+            #print hashtags
           
 
-        my_dict=[sports("cricket", "football","Tennis","vollyball","Badminton"), Politics,place,Day("morning","evening","night","dark"),wheather("cloudy","rainy","spring","Autum")]
+        my_dict={"sports":("cricket", "football","Tennis","vollyball","Badminton"), "Day":("morning","evening","night","dark"),"wheather":("cloudy","rainy","spring","Autum")}
         for item in hashtags:
             for key,value in my_dict.items():
+
                 if item in value:
                     print "interest in:"
-                    print key 
+                    print key,
         #for Z in range(0, len(user_media.caption['data'])):
          #Z = np.random.uniform(0, 1, 20)
-            #plt.pie(Z)
+            #plt.pie
 
+################################### GET_COMMENT_LIST #####################################################3
+'''
+FUNCTION TO GET THE LIST OF COMMENTS ON A POST OF GIVEN USERNAME.
+'''
+def get_comment_list(insta_username):
+    media_id = get_post_id(insta_username)
+    request_url = (BASE_URL + 'media/%s/comments?access_token=%s') % (media_id, ACCESS_TOKEN)
+    print 'GET request url : %s' % (request_url)
+    comment_list = requests.get(request_url).json()
+    if comment_list['meta']['code'] == 200:
+        if len(comment_list['data']):
+            print "Post liked by :"
+            for i in range(len(comment_list['data'])):
+                print "%d)" % (i + 1) + comment_list['data'][i]['text']
+        else:
+            print "No one commented the recent post of user"
+    else:
+        print 'Status code other than 200 received!'
 
 
 
